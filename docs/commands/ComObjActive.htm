@@ -47,5 +47,30 @@ else
     MsgBox word.ActiveDocument.FullName</pre>
 </div>
 
+<div class="ex" id="ExExcel">
+<p><a class="ex_number" href="#ExExcel"></a> Connect to Excel.</p>
+<pre>
+Excel_Get(winTitle:="ahk_class XLMAIN") {
+    if (WinExist(winTitle))
+        ctlID := ControlGetHwnd("EXCEL71")
+    else
+        return ComObject("Excel.application")
+    numput('Int64',0x20400, 'Int64',0x46000000000000C0, IID_IDispatch:=buffer(16))
+    dllcall("oleacc\AccessibleObjectFromWindow", "ptr",ctlID, "uint",0xFFFFFFF0, "ptr",IID_IDispatch, "ptr*",win:=ComValue(9,0), 'HRESULT')
+    loop {
+        try
+            return win.application
+        catch
+            ControlSend("{escape}", "EXCEL71")
+    }
+}
+</div>
+
+<div class="ex" id="ExOther">
+<p><a class="ex_number" href="#ExOther"></a>demo of connect to soft.</p>
+<pre>
+ppt := ComObjActive("Powerpoint.application")
+</div>
+
 </body>
 </html>
